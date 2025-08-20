@@ -67,3 +67,4 @@ Se exigirá un **porcentaje de asistencia del 75 % para aprobar** el curso.
 - **R. Landau** – *A Survey of Computational Physics: Introductory Computational Science*. Princeton University Press. [Leer en línea](https://www.dsf.unica.it/~fiore/survey.pdf)
 - **M. Zingale** – *Tutorial on Computational Astrophysics*. [Leer en línea](https://zingale.github.io/comp_astro_tutorial/intro.html)
 - **Q. Kong** – *Python Programming and Numerical Methods: A Guide for Engineers and Scientists*. Elsevier. [Leer en línea](https://pythonnumericalmethods.berkeley.edu/notebooks/Index.html)
+- 
