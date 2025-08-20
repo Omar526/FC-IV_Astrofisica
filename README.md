@@ -60,6 +60,8 @@ El curso combina **clases expositivas** y **sesiones prácticas semanales**. Ade
 
 Existe la posibilidad de **Prueba de Suficiencia (PES)** según lo estipulado en el programa oficial.
 
+Se exigirá un **porcentaje de asistencia del 75 % para aprobar** el curso.
+
 ## Bibliografía Básica
 
 - **R. Landau** – *A Survey of Computational Physics: Introductory Computational Science*. Princeton University Press. [Leer en línea](https://www.dsf.unica.it/~fiore/survey.pdf)
