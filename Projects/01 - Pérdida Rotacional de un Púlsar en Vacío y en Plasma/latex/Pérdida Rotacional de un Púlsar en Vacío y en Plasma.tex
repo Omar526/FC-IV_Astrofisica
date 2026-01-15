@@ -1,0 +1,217 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{color}
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Simulación del Frenado Rotacional de un Púlsar}}} \normalsize
+
+Un \textbf{púlsar}\footnote{Un púlsar es una estrella de neutrones altamente magnetizada y en rápida rotación, que emite radiación electromagnética de forma periódica debido a la desalineación entre su eje de rotación y su eje magnético.} es un laboratorio astrofísico natural para estudiar procesos de pérdida de energía rotacional y evolución dinámica a largo plazo.
+
+El objetivo de este proyecto es modelar numéricamente la \textbf{desaceleración rotacional (spin--down)} de un púlsar, utilizando formulaciones basadas en \textbf{balance energético}, e investigar cómo distintas hipótesis físicas conducen a dinámicas observacionalmente distinguibles.
+
+Se utilizará como caso de estudio el \textbf{Púlsar del Cangrejo (PSR B0531+21)}, uno de los púlsares mejor caracterizados observacionalmente.
+
+\vspace{0.3cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principal:}}} \normalsize
+
+\begin{enumerate}
+
+% ======================================================
+\item \textbf{Modelo físico general}
+
+El púlsar se modela como una estrella de neutrones rodeada por una
+\textbf{magnetosfera}\footnote{La magnetosfera es la región del espacio dominada por el campo magnético del púlsar, donde el movimiento de partículas cargadas está fuertemente acoplado a la rotación de la estrella.}
+compuesta por
+\textbf{plasma}\footnote{El plasma es un gas ionizado formado por partículas cargadas libres, cuya dinámica está gobernada por campos electromagnéticos.}. 
+
+El sistema se caracteriza por:
+\begin{itemize}
+\item momento de inercia \(I\),
+\item radio estelar \(R\),
+\item campo magnético dipolar superficial \(B\),
+\item frecuencia angular de rotación \(\Omega(t)\),
+\item ángulo de inclinación magnética \(\alpha(t)\).
+\end{itemize}
+
+La energía rotacional del púlsar es:
+\[
+E_\text{rot}
+=
+\frac{1}{2} I(\Omega)\,\Omega^2.
+\]
+
+Su evolución temporal se obtiene desde el balance energético:
+\[
+\frac{dE_\text{rot}}{dt}
+=
+- P_\text{loss},
+\]
+donde \(P_\text{loss}\) representa la potencia total perdida por procesos electromagnéticos.
+
+% ======================================================
+\item \textbf{Proyecto A: Frenado magnetodipolar con parámetros dinámicos}
+
+Se considera que el momento de inercia depende débilmente de la rotación:
+\[
+I(\Omega) = I_0\left(1 + \epsilon \Omega^2\right),
+\]
+y que el ángulo magnético evoluciona lentamente:
+\[
+\alpha(t) = \alpha_0 + \beta t.
+\]
+
+La potencia radiada por un dipolo magnético en rotación es:
+\[
+P_\text{dip}
+=
+\frac{2}{3c^3}
+\left(B R^3\right)^2
+\Omega^4
+\sin^2\alpha(t).
+\]
+
+El balance energético conduce a:
+\[
+\boxed{
+\frac{d}{dt}
+\left[
+\frac{1}{2} I(\Omega)\Omega^2
+\right]
+=
+-
+\frac{2 B^2 R^6}{3c^3}
+\Omega^4
+\sin^2\alpha(t)
+}
+\]
+
+% ======================================================
+\item \textbf{Parámetros reales: Púlsar del Cangrejo}
+
+Valores observacionales:
+\[
+\begin{aligned}
+P &\approx 0.0335\ \text{s}, \\
+\Omega_0 &\approx 187.5\ \text{rad s}^{-1}, \\
+\dot{\Omega}_0 &\approx -2.37\times10^{-9}\ \text{rad s}^{-2}, \\
+n_\text{obs} &\approx 2.51.
+\end{aligned}
+\]
+
+Parámetros estructurales típicos:
+\[
+R = 12\ \text{km}, \quad
+I = 10^{38}\ \text{kg m}^2, \quad
+B = 3.8\times10^{12}\ \text{G}.
+\]
+
+% ======================================================
+\item \textbf{Resolución numérica y análisis}
+
+Resuelva las ecuaciones mediante \code{RK4} y \code{RK45}.  
+Compare estabilidad, precisión y el valor numérico del índice de frenado.
+
+\end{enumerate}
+
+\textbf{Referencias:}
+
+\begin{enumerate}
+\item \url{https://en.wikipedia.org/wiki/Pulsar}
+\item \url{https://en.wikipedia.org/wiki/Crab_Pulsar}
+\item \url{https://www.atnf.csiro.au/research/pulsar/psrcat}
+\end{enumerate}
+
+\end{document}

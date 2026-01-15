@@ -1,0 +1,228 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{color}
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Movimiento de partículas cargadas en el campo magnético terrestre}}} \normalsize
+
+El objetivo de este proyecto es modelar y simular numéricamente el movimiento de partículas cargadas en el campo magnético de la Tierra, considerando al planeta como un dipolo magnético ideal\footnote{Un dipolo magnético es una aproximación válida del campo terrestre lejos de la superficie, ampliamente utilizada en física espacial y magnetosférica.}.  
+
+El trabajo se estructura en dos etapas principales:  
+(i) el cálculo analítico y evaluación punto a punto del campo magnético terrestre, y  
+(ii) la simulación de trayectorias de partículas cargadas bajo la acción de la fuerza de Lorentz\footnote{La fuerza de Lorentz describe la interacción entre partículas cargadas y campos electromagnéticos.}.
+
+Se estudiarán distintos regímenes dinámicos, incluyendo precipitación polar, atrapamiento magnético y formación de trayectorias tipo espiral asociadas a los cinturones de Van Allen\footnote{Los cinturones de Van Allen son regiones de partículas cargadas atrapadas por el campo magnético terrestre.}.  
+
+Finalmente, se propone como extensión opcional la incorporación de un campo magnético interplanetario uniforme para estudiar la ruptura de simetría del campo terrestre y su relación con fenómenos como las auroras polares.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+% ======================================================
+\item \textbf{Campo magnético terrestre}
+
+Modele el campo magnético de la Tierra como el campo generado por un dipolo magnético centrado en el origen, cuyo momento magnético está alineado con el eje \(z\):
+
+\[
+\boxed{
+\vec{B}(\vec{r})
+=
+\frac{\mu_0}{4\pi}
+\left[
+\frac{3(\vec{M}\cdot\vec{r})\vec{r}}{r^5}
+-
+\frac{\vec{M}}{r^3}
+\right]
+}
+\]
+
+donde:
+
+\begin{itemize}
+\item \( \vec{B} \): campo magnético (T),
+\item \( \vec{r} \): vector posición desde el centro de la Tierra,
+\item \( r = |\vec{r}| \),
+\item \( \vec{M} \): momento dipolar magnético terrestre,
+\item \( \mu_0 \): permeabilidad magnética del vacío.
+\end{itemize}
+
+Utilice valores realistas del momento dipolar terrestre y evalúe el campo magnético punto a punto sobre una grilla tridimensional.
+
+\vspace{0.2cm}
+
+% ======================================================
+\item \textbf{Ecuaciones de movimiento de partículas cargadas}
+
+El movimiento de una partícula cargada en un campo magnético está gobernado por la segunda ley de Newton:
+
+\[
+\boxed{
+m\frac{d^2\vec{r}}{dt^2}
+=
+q\,\vec{v}\times\vec{B}(\vec{r})
+}
+\]
+
+donde \(m\) y \(q\) corresponden a la masa y carga de la partícula, respectivamente.
+
+Formule el problema como un sistema de ecuaciones diferenciales ordinarias de primer orden y resuélvalo utilizando métodos numéricos explícitos como \code{RK4} o integradores adaptativos como \code{RK45} o \code{DOP853} del módulo \code{scipy.integrate}.
+
+\vspace{0.2cm}
+
+% ======================================================
+\item \textbf{Escenarios físicos a simular}
+
+Simule y analice al menos los siguientes escenarios:
+
+\begin{itemize}
+\item \textbf{Precipitación polar:} partículas con velocidad casi paralela a las líneas de campo que alcanzan regiones cercanas a los polos terrestres.
+\item \textbf{Atrapamiento magnético:} partículas con ángulos de pitch suficientemente grandes que rebotan debido al efecto espejo magnético.
+\item \textbf{Trayectorias helicoidales:} movimiento combinado de giro ciclotrón y desplazamiento a lo largo de las líneas de campo.
+\end{itemize}
+
+Analice el rol del ángulo de pitch inicial y su relación con el cono de pérdida.
+
+\vspace{0.2cm}
+
+% ======================================================
+\item \textbf{Visualización y análisis}
+
+\begin{itemize}
+\item Grafique las líneas de campo magnético terrestre.
+\item Superponga las trayectorias de las partículas cargadas.
+\item Visualice trayectorias en 2D y 3D.
+\item Analice la conservación de la energía.
+\end{itemize}
+
+\vspace{0.2cm}
+
+% ======================================================
+\item \textbf{Extensión opcional: campo magnético combinado}
+
+Como desafío adicional, incorpore un campo magnético interplanetario uniforme \( \vec{B}_{\text{IMF}} \), y estudie el campo total:
+
+\[
+\boxed{
+\vec{B}_{\text{total}}(\vec{r})
+=
+\vec{B}_{\text{dipolo}}(\vec{r})
++
+\vec{B}_{\text{IMF}}
+}
+\]
+
+Visualice la pérdida de simetría del campo magnético terrestre y simule nuevamente la trayectoria de algunas partículas cargadas.
+
+\vspace{0.2cm}
+
+% ======================================================
+\item \textbf{Discusión numérica}
+
+Evalúe la estabilidad de los integradores utilizados, comparando esquemas de paso fijo y adaptativo. Discuta las limitaciones físicas del modelo (ausencia de colisiones, relatividad, corrientes inducidas, etc.).
+
+\end{enumerate}
+
+\textbf{Referencias:}
+
+\begin{enumerate}
+\item \url{https://es.wikipedia.org/wiki/Campo_magn%C3%A9tico_terrestre}
+\item \url{https://es.wikipedia.org/wiki/Fuerza_de_Lorentz}
+\item \url{https://es.wikipedia.org/wiki/Cinturones_de_Van_Allen}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,205 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}                                  % language
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}                      % amspackages
+\usepackage{color}                                          % color
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+
+
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+\newcommand{\tabref}[1]{\textbf{\textsf{Tabla \ref{#1}}}}
+\newcommand{\subfigref}[1]{\textbf{\textsf{Fig. \subref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Simulación de la Precesión Orbital de S2 alrededor de Sagitario A*}}} \normalsize
+
+El objetivo de este trabajo es modelar la órbita de la estrella S2 alrededor del agujero negro supermasivo Sagitario A*, incorporando los efectos relativistas responsables de la \textbf{precesión del periastro}.
+
+Se estudiarán dos enfoques:
+
+\begin{itemize}
+
+\item \textbf{Nivel A:} Potencial efectivo modificado de Schwarzschild, modelado como una fuerza central con corrección proporcional a \(r^{-3}\).
+
+\item \textbf{Nivel B:} Dinámica post-newtoniana 1PN (dependiente de posición y velocidad).
+
+\end{itemize}
+
+Se calculará la variación del ángulo de periastro en cada enfoque, se compararán los resultados con datos observacionales disponibles y, con fines de visualización, se propondrá una versión exagerada de la precesión mediante la amplificación de los términos relativistas. Los resultados se presentarán mediante gráficas de las órbitas y animaciones.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Ecuaciones de movimiento}
+
+\begin{itemize}
+
+\item \textbf{Enfoque A (potencial efectivo modificado de Schwarzschild):}
+
+$$ V_\text{eff}(r) = - \frac{GMm}{r} + \frac{L^2}{2mr^2} \textcolor{blue}{ - \frac{GML^2}{c^2mr^3}} \qquad \Longrightarrow \qquad \boxed{\frac{d^2 \vec{r}}{dt^2} = -\frac{GM}{r^3}\vec{r} \textcolor{blue}{- \frac{3 GM L^2}{m^2 c^2 r^5}\vec{r}}} $$
+
+\item \textbf{Enfoque B (post-newtoniano 1PN completo):}
+\[ \boxed{
+\frac{d^2 \vec{r}}{dt^2} =
+-\frac{GM}{r^3}\,\vec{r} \textcolor{blue}{\,+
+\frac{GM}{c^2 r^3}
+\left[
+\left(4\frac{GM}{r} - v^2 \right)\vec{r}
++ 4(\vec{r}\cdot\vec{v})\,\vec{v}
+\right]}.
+} \]
+
+\end{itemize}
+
+
+Resuelva la ecuación de movimiento para cada enfoque utilizando métodos como \code{Verlet} o \code{Runge--Kutta de cuarto orden}; además, compare sus resultados utilizando el método de referencia \code{DOP853} de \code{scipy}.
+
+Simule al menos 5 periodos orbitales.
+
+\vspace{0.2cm}
+
+\item \textbf{Condiciones iniciales y parámetros orbitales}
+
+Utilice datos observacionales de la estrella S2 para fijar el semieje mayor \(a\), la excentricidad \(e\) y el período orbital \(T\). Por ejemplo:
+\[
+a \approx 1000\ \text{UA}, \quad
+e \approx 0.88, \quad
+T \approx 16\ \text{años}.
+\]
+
+Determine la posición y velocidad iniciales mediante la ecuación de \textsl{vis-viva} y considere al agujero negro como un centro fijo e inmóvil.
+
+\vspace{0.2cm}
+
+\item \textbf{Cálculo del periastro y precesión}
+
+\begin{itemize}
+\item Identifique los puntos de \textbf{periastro}\footnote{El periastro, periapsis, periápside, o pericentro es el punto en una órbita elíptica donde la distancia entre los cuerpos es mínima.} a lo largo de la simulación mediante la condición \( \dot{r}(t) = 0 \).
+\item Calcule el \textbf{ángulo de periastro}\footnote{El ángulo de periastro es una magnitud geométrica que define la orientación de la órbita dentro de su plano. Corresponde al ángulo entre una dirección de referencia fija (típicamente un eje del sistema de coordenadas) y la dirección del periastro.} \(\phi\) asociado a cada punto.
+\item Determine la \textbf{precesión del periastro por órbita}\footnote{La precesión del periastro por órbita es la variación del ángulo de periastro tras completar una órbita. Cuantifica la rotación de la elipse orbital entre dos pasos consecutivos por el periastro.} \(\Delta \phi\) y compare los resultados obtenidos con los enfoques A y B.
+\item Compare los valores numéricos con la precesión observada de S2 calculada de forma teórica mediante la ecuación $$ \Delta\phi \approx \frac{6 \pi G(M+m)}{c^2 a(1-e^{2)}}  $$.
+\end{itemize}
+
+
+\vspace{0.2cm}
+
+\item \textbf{Precisión del esquema}
+
+Para cada enfoque, seleccione un paso de tiempo que asegure la estabilidad del método numérico y la conservación aproximada de las cantidades físicas relevantes. Verifique que el momento angular se mantenga constante, con variaciones inferiores al 1\% durante toda la simulación.
+
+\vspace{0.2cm}
+
+\item \textbf{Visualización}
+
+\begin{itemize}
+\item Grafique la trayectoria orbital de S2 para ambos enfoques y el caso newtoniano puro.
+\item Grafique las diferencias entre métodos para diferentes tamaños de paso de tiempo.
+\item Grafique el ángulo de periastro en función del número de órbita.
+\item Proponga una versión de la simulación donde los términos relativistas sean multiplicados por un factor \(\alpha > 1\) para resaltar visualmente la precesión y generar una animación ilustrativa.
+\end{itemize}
+
+\end{enumerate}
+
+\textbf{Referencias:}
+
+\begin{enumerate}
+\item \url{https://es.wikipedia.org/wiki/Problema_de_los_dos_cuerpos}
+\item \url{https://es.wikipedia.org/wiki/Potencial_efectivo}
+\item \url{https://es.wikipedia.org/wiki/Problema_de_los_dos_cuerpos_en_la_relatividad_general}
+
+
+
+\end{enumerate}
+
+\end{document}

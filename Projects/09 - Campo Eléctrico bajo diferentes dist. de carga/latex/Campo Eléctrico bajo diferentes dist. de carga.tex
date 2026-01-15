@@ -1,0 +1,184 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}                                  % language
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}                      % amspackages
+\usepackage{color}                                          % color
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 2}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+\newcommand{\tabref}[1]{\textbf{\textsf{Tabla \ref{#1}}}}
+\newcommand{\subfigref}[1]{\textbf{\textsf{Fig. \subref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Modelación Numérica del Campo Eléctrico mediante la Ecuación de Poisson}}} \normalsize
+
+El objetivo de este proyecto es determinar numéricamente el \textbf{potencial eléctrico} generado por distribuciones de carga continuas y, a partir de él, calcular el \textbf{campo eléctrico} mediante el gradiente. La ecuación fundamental a resolver es la ecuación de Poisson:
+
+\[
+\nabla^2 \phi(\mathbf{r}) = - \frac{\rho(\mathbf{r})}{\varepsilon_0},
+\]
+
+donde \(\phi(\mathbf{r})\) es el potencial eléctrico, \(\rho(\mathbf{r})\) la densidad de carga, y \(\varepsilon_0\) la permitividad del vacío.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Discretización de Poisson}
+
+\begin{itemize}
+\item Defina una malla regular en 2D o 3D con paso \(\Delta x, \Delta y, \Delta z\).
+\item Aproximación del laplaciano mediante diferencias finitas centradas:
+\[
+\nabla^2 \phi_{i,j,k} \approx 
+\frac{\phi_{i+1,j,k} - 2\phi_{i,j,k} + \phi_{i-1,j,k}}{\Delta x^2} +
+\frac{\phi_{i,j+1,k} - 2\phi_{i,j,k} + \phi_{i,j-1,k}}{\Delta y^2} +
+\frac{\phi_{i,j,k+1} - 2\phi_{i,j,k} + \phi_{i,j,k-1}}{\Delta z^2}.
+\]
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Condiciones de frontera}
+
+\begin{itemize}
+\item Defina las condiciones de contorno de la región de estudio. Para esferas aisladas, puede usar \(\phi \to 0\) a grandes distancias.
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Solución numérica}
+
+\begin{itemize}
+\item Resuelva el sistema lineal despejando \(\phi_{i,j,k}\) de la ecuación discretizada.
+\item Itere hasta alcanzar convergencia mediante el método de \textbf{Jacobi} (simple y fácil de implementar), o métodos más eficientes como \textbf{Gauss-Seidel} o \textbf{SOR}.
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Cálculo del campo eléctrico}
+
+\begin{itemize}
+\item Una vez obtenido \(\phi\) en cada punto, el campo eléctrico se calcula como
+\[
+\mathbf{E} = -\nabla \phi.
+\]
+\item Aproximación del gradiente mediante diferencias finitas centradas:
+\[
+E_x \approx -\frac{\phi_{i+1,j,k}-\phi_{i-1,j,k}}{2\Delta x}, \quad
+E_y \approx -\frac{\phi_{i,j+1,k}-\phi_{i,j-1,k}}{2\Delta y}, \quad
+E_z \approx -\frac{\phi_{i,j,k+1}-\phi_{i,j,k-1}}{2\Delta z}.
+\]
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Visualización}
+
+\begin{itemize}
+\item Grafique líneas de flujo del campo eléctrico en 2D o 3D.
+\item Visualice mapas de intensidad \(|\mathbf{E}|\) o del potencial \(\phi\).
+\item Compare configuraciones: esferas sólidas vs huecas, distribuciones múltiples, densidades no uniformes.
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Extensión}
+
+\begin{itemize}
+\item Resuelva la ecuación utilizando coordenadas esféricas para el caso de una esfera cargada y compare con la solución en coordenadas cartesianas.
+\item Explore la eficiencia de distintos métodos iterativos y el efecto del tamaño de la malla.
+\end{itemize}
+
+\end{enumerate}
+
+\end{document}

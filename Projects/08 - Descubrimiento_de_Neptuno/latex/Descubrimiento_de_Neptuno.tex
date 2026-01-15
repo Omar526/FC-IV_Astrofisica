@@ -1,0 +1,168 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}                                  % language
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}                      % amspackages
+\usepackage{color}                                           % color
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+\newcommand{\tabref}[1]{\textbf{\textsf{Tabla \ref{#1}}}}
+\newcommand{\subfigref}[1]{\textbf{\textsf{Fig. \subref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Simulación del Descubrimiento de Neptuno mediante Optimización de Perturbaciones Orbitales}}} \normalsize
+
+El objetivo de este trabajo es reproducir, mediante simulaciones computacionales, el razonamiento físico que condujo al descubrimiento del planeta Neptuno, a partir de las desviaciones observadas en la órbita de Urano respecto a las predicciones del modelo newtoniano de dos cuerpos (Sol--Urano).
+
+El sistema será modelado como un problema gravitacional de \textbf{N-cuerpos}, considerando el Sol, Urano y un planeta perturbador hipotético. Se utilizará la aproximación de órbita circular para el planeta desconocido, lo que permite fijar su velocidad inicial y reducir el número de parámetros a optimizar. A partir de datos orbitales sintéticos o históricos, se evaluará si las anomalías en la órbita de Urano pueden explicarse mediante la introducción de un planeta perturbador con parámetros físicos plausibles.
+
+Se hará énfasis en la \textsl{optimización de parámetros} para automatizar la búsqueda de la masa y posición inicial del planeta perturbador que minimicen la discrepancia entre las trayectorias simuladas y los datos de referencia, evitando el método de prueba y error manual.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Modelo gravitacional de N-cuerpos}
+
+Considere un sistema compuesto por el Sol, Urano y un planeta perturbador hipotético. Las ecuaciones de movimiento para cada cuerpo están dadas por la ley de gravitación universal:
+
+\[
+\frac{d^2 \vec{r}_i}{dt^2}
+=
+- G \sum_{j \neq i}
+m_j
+\frac{\vec{r}_i - \vec{r}_j}
+{|\vec{r}_i - \vec{r}_j|^3},
+\]
+
+donde $\vec{r}_i$ y $m_i$ representan la posición y masa del cuerpo $i$, respectivamente. Resuelva este sistema de ecuaciones acopladas utilizando el algoritmo de Verlet.
+
+\item \textbf{Datos orbitales de referencia}
+
+Se dispondrá de los datos orbitales de Urano en ausencia de perturbaciones externas, obtenidos mediante un modelo de dos cuerpos (Sol--Urano) o datos históricos. Estos datos servirán como referencia para cuantificar las desviaciones inducidas por el planeta perturbador.
+
+\item \textbf{Planeta perturbador}
+
+Se introduce un tercer cuerpo (planeta perturbador) y se asume órbita circular para simplificar el problema. Esto permite \textsl{fijar la velocidad inicial} del planeta según su semieje mayor \(a_p\):
+
+\[
+v_0 = \sqrt{\frac{G M_\odot}{a_p}}.
+\]
+
+Los parámetros a optimizar serán entonces:
+
+\begin{itemize}
+\item Masa del planeta perturbador \(M_p\),
+\item Posición inicial angular \(\phi_0\) (fase orbital).
+\end{itemize}
+
+Esta simplificación reduce el espacio de búsqueda y hace el problema más didáctico.
+
+\item \textbf{Función de error}
+
+Para cuantificar la discrepancia entre la órbita simulada de Urano (\(\vec{r}_\text{sim}(t_i)\)) y los datos de referencia (\(\vec{r}_\text{ref}(t_i)\)), se define la función de error a minimizar:
+
+\[
+E(M_p, \phi_0) =
+\sqrt{
+\frac{1}{N} \sum_{i=1}^{N} 
+\left\| \vec{r}_\text{sim}(t_i; M_p, \phi_0) - \vec{r}_\text{ref}(t_i) \right\|^2
+}.
+\]
+
+\item \textbf{Optimización de parámetros}
+
+Se emplearán métodos de optimización automática para encontrar los valores de \(M_p\) y \(\phi_0\) que minimicen \(E(M_p, \phi_0)\). Ejemplos de algoritmos apropiados en Python incluyen:
+
+\begin{itemize}
+\item \texttt{scipy.optimize.minimize} (métodos como Nelder-Mead),
+\item \texttt{scipy.optimize.differential\_evolution} para búsqueda global.
+\end{itemize}
+
+Este enfoque evita la exploración manual por grilla y permite una estimación reproducible de los parámetros del planeta perturbador.
+
+\item \textbf{Visualización}
+
+Se recomienda generar gráficos para:
+
+\begin{itemize}
+\item Comparar la órbita de Urano con y sin la influencia del planeta perturbador.
+\item Mostrar la trayectoria del planeta perturbador.
+\item Visualizar el comportamiento de la función de error en función de los parámetros optimizados.
+\end{itemize}
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,232 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{color}
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Simulación de la Precesión del Perihelio de Mercurio}}} \normalsize
+
+El objetivo de este trabajo es modelar numéricamente la órbita del planeta Mercurio alrededor del Sol, incorporando los efectos relativistas responsables de la \textbf{precesión anómala de su perihelio}, uno de los primeros tests experimentales exitosos de la Relatividad General.
+
+Se estudiarán dos enfoques complementarios:
+
+\begin{itemize}
+
+\item \textbf{Nivel A:} Potencial efectivo modificado de Schwarzschild, modelado como una fuerza central con corrección proporcional a \(r^{-3}\).
+
+\item \textbf{Nivel B:} Dinámica post-newtoniana de primer orden (1PN), dependiente explícitamente de la posición y la velocidad.
+
+\end{itemize}
+
+Se calculará la precesión del perihelio por órbita en ambos enfoques, se compararán los resultados con el valor observado históricamente (\(\approx 43''\) por siglo) y se propondrá una versión amplificada del efecto relativista con fines de visualización y animación.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Ecuaciones de movimiento}
+
+\begin{itemize}
+
+\item \textbf{Enfoque A (potencial efectivo modificado de Schwarzschild):}
+
+\[
+V_\text{eff}(r)
+=
+-\frac{GMm}{r}
++
+\frac{L^2}{2mr^2}
+\textcolor{blue}{
+-\frac{GML^2}{c^2mr^3}
+}
+\]
+
+lo que conduce a la ecuación de movimiento:
+
+\[
+\boxed{
+\frac{d^2 \vec{r}}{dt^2}
+=
+-\frac{GM}{r^3}\vec{r}
+\textcolor{blue}{
+-
+\frac{3GM L^2}{m^2 c^2 r^5}\vec{r}
+}
+}
+\]
+
+\item \textbf{Enfoque B (post-newtoniano 1PN completo):}
+
+\[
+\boxed{
+\frac{d^2 \vec{r}}{dt^2}
+=
+-\frac{GM}{r^3}\vec{r}
+\textcolor{blue}{
++
+\frac{GM}{c^2 r^3}
+\left[
+\left(4\frac{GM}{r} - v^2 \right)\vec{r}
++ 4(\vec{r}\cdot\vec{v})\,\vec{v}
+\right]
+}
+}
+\]
+
+\end{itemize}
+
+Resuelva las ecuaciones de movimiento utilizando métodos numéricos como \code{Verlet} o \code{Runge--Kutta de cuarto orden}, y compare los resultados con el método de referencia \code{DOP853} del módulo \code{scipy.integrate}.
+
+Simule al menos \(100\) órbitas completas para resolver adecuadamente la precesión acumulada.
+
+\vspace{0.2cm}
+
+\item \textbf{Condiciones iniciales y parámetros orbitales}
+
+Utilice parámetros orbitales conocidos de Mercurio:
+
+\[
+a \approx 0.387\ \text{UA}, \quad
+e \approx 0.206, \quad
+T \approx 88\ \text{días}.
+\]
+
+Determine la posición y velocidad iniciales mediante la ecuación de \textsl{vis-viva}, considerando al Sol como un centro fijo e inmóvil.
+
+\vspace{0.2cm}
+
+\item \textbf{Cálculo del perihelio y precesión}
+
+\begin{itemize}
+\item Identifique los puntos de \textbf{perihelio}\footnote{El perihelio es el punto de la órbita donde la distancia al Sol es mínima.} mediante la condición \( \dot{r}(t) = 0 \).
+\item Calcule el \textbf{ángulo de perihelio} \(\phi\) para cada paso por el perihelio.
+\item Determine la \textbf{precesión del perihelio por órbita} \(\Delta\phi\).
+\item Compare el valor obtenido con la predicción teórica relativista:
+\[
+\Delta\phi
+\approx
+\frac{6\pi GM}{c^2 a(1-e^2)}.
+\]
+\end{itemize}
+
+\vspace{0.2cm}
+
+\item \textbf{Precisión y conservación}
+
+Analice la estabilidad numérica del esquema seleccionado, verificando la conservación del momento angular y de la energía efectiva. Las variaciones relativas no deben superar el \(1\%\) durante toda la simulación.
+
+\vspace{0.2cm}
+
+\item \textbf{Visualización}
+
+\begin{itemize}
+\item Grafique la órbita newtoniana y relativista de Mercurio.
+\item Grafique la evolución del ángulo de perihelio en función del número de órbita.
+\item Compare explícitamente los enfoques A y B.
+\item Introduzca un factor de amplificación \(\alpha > 1\) en los términos relativistas para generar animaciones ilustrativas de la precesión.
+\end{itemize}
+
+\end{enumerate}
+
+\textbf{Referencias:}
+
+\begin{enumerate}
+\item \url{https://es.wikipedia.org/wiki/Precesi%C3%B3n_del_perihelio_de_Mercurio}
+\item \url{https://es.wikipedia.org/wiki/Problema_de_los_dos_cuerpos}
+\item \url{https://es.wikipedia.org/wiki/Aproximaci%C3%B3n_postnewtoniana}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,187 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{color}
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 2}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\code}[1]{%
+  \colorbox{gray!15}{\texttt{#1}}%
+}
+
+\usepackage{url}
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Rotación Sincrónica de la Luna}}} \normalsize
+
+La rotación sincrónica es el fenómeno por el cual un objeto astronómico mantiene siempre la misma cara apuntando a otro, como ocurre con la Luna respecto de la Tierra. Esto se produce debido a la interacción gravitatoria no uniforme sobre un cuerpo deformable, que genera un torque gravitacional. La disipación interna de energía transforma la rotación inicial en un estado estable de rotación sincrónica. Este proyecto tiene como objetivo estudiar este fenómeno dentro del marco de la mecánica clásica, modelando la Luna como un cuerpo extendido y ligeramente asimétrico.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Modelo Matemático}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Ecuaciones de movimiento}
+
+Se modela la Luna como un sólido rígido con momentos de inercia \((I_1, I_2, I_3)\) alrededor de sus ejes principales, y posición \(\vec{r}=(x,y)\) respecto al centro de la Tierra:
+
+\[
+\frac{d^2 \vec{r}}{dt^2} = - \frac{G M}{r^3} \vec{r}
+\]
+
+donde \(M\) es la masa de la Tierra y \(r = |\vec{r}|\).
+
+La rotación de la Luna alrededor de su eje principal \(\theta\) está gobernada por el torque gravitacional:
+
+\[
+I_3 \frac{d\omega}{dt} = - 3 \frac{G M (I_2 - I_1)}{r^3} \sin \big( 2(\theta - \phi_r) \big) - k \, \omega
+\]
+
+donde \(\omega = d\theta/dt\), \(\phi_r = \arctan2(y,x)\), y \(k\) es un coeficiente de disipación.
+
+\item \textbf{Disipación de energía}
+
+El término \(-k\omega\) representa la fricción interna por deformación de marea. Físicamente, la energía mecánica total no se conserva:
+
+\[
+\frac{dE}{dt} = - k \omega^2 \le 0
+\]
+
+lo que explica que, con el tiempo, la Luna ajuste su rotación hasta alcanzar la sincronización con la traslación.
+
+\item \textbf{Método numérico}
+
+Se resuelven las ecuaciones usando \code{Runge-Kutta de cuarto orden} o \code{RK45} de \code{scipy}.
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Parámetros físicos}}} \normalsize
+
+\begin{itemize}
+\item Masa de la Tierra: \(M = 5.972 \times 10^{24}\ \text{kg}\)
+\item Masa de la Luna: \(m = 7.348 \times 10^{22}\ \text{kg}\)
+\item Distancia promedio: \(a = 3.844 \times 10^8\ \text{m}\)
+\item Radio de la Luna: \(R_\text{Luna} = 1.737 \times 10^6\ \text{m}\)
+\item Momentos de inercia: \(I_1 \approx 0.95 \cdot \frac{2}{5} m R^2, \quad I_2 = I_3 = \frac{2}{5} m R^2\)
+\item Coeficiente de disipación: \(k \approx 1\times10^{16}\ \text{N m s}\)
+\end{itemize}
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Preguntas a responder}}} \normalsize
+
+\begin{enumerate}
+
+\item ¿Cómo evoluciona la orientación de la Luna a lo largo del tiempo?
+\item ¿Cuánto tiempo tarda en alcanzarse la rotación sincrónica?
+\item ¿Cómo afecta el coeficiente de disipación \(k\) a la velocidad de convergencia?
+\item ¿Qué papel juegan los momentos de inercia \(I_1, I_2\) en la estabilidad de la orientación?
+\item ¿Cómo varía la trayectoria orbital de la Luna si se ignora la disipación?
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Visualización, animación y gráficas}}} \normalsize
+
+Se propone generar una animación de la Luna orbitando la Tierra y un conjunto de gráficas de seguimiento de variables dinámicas relevantes:
+
+\begin{itemize}
+\item \textbf{Animación:} La Luna se representa mediante un punto o una figura amplificada, y la orientación del eje principal se indica con una flecha. Una línea une los centros de la Tierra y la Luna para visualizar la distancia.
+\item \textbf{Gráficas sugeridas:}
+  \begin{enumerate}
+    \item \textbf{Orientación angular:} Evolución de \(\theta(t)\) y \(\omega(t) = d\theta/dt\) para ver la convergencia hacia la rotación sincrónica.
+    \item \textbf{Torque gravitacional:} \(\tau(t) = -3 \frac{G M (I_2 - I_1)}{r^3} \sin 2(\theta - \phi_r)\) para analizar cómo varía la fuerza restauradora sobre el eje de rotación.
+    \item \textbf{Energía mecánica:} \(E_\text{total}(t) = \frac{1}{2} m v^2 + \frac{1}{2} I_3 \omega^2 - \frac{G M m}{r}\) mostrando la pérdida de energía debida a la disipación.
+  \end{enumerate}
+\item Se recomienda usar librerías de Python como \code{matplotlib} para las gráficas y \code{FuncAnimation} para la animación, almacenando las variables de interés en arrays para poder graficarlas fácilmente.
+\item Los ejes y leyendas deben indicar claramente las unidades físicas correspondientes (m, rad, kg m\(^2\)/s, N m, etc.) para mantener consistencia dimensional.
+\end{itemize}
+
+
+\end{document}

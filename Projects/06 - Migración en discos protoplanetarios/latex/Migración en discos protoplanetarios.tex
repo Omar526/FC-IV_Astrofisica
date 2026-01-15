@@ -1,0 +1,167 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{color}
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm,
+            paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[hang,flushmargin]{footmisc}
+
+\title{\textbf{PEP 3}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\newcommand{\code}[1]{\colorbox{gray!15}{\texttt{#1}}}
+
+\usepackage{url}
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+\usepackage{fancyhdr}
+\lhead[]{} \chead[]{} \rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+\lfoot[]{} \cfoot[]{\thepage} \rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{} \fancyhead[C]{} \fancyhead[R]{}
+\fancyfoot[L]{} \fancyfoot[C]{\thepage} \fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt} \renewcommand{\headrulewidth}{0pt}
+}
+
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{%
+\centering \textsf{\textbf{#5}} \par
+Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par
+Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par
+\textit{#6}\par #7\par}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+\vspace*{0.2cm}
+\vspace{1ex}\hrule\vspace{1ex}
+
+\noindent \large{\textbf{\textsf{Migración Orbital de Partículas en Discos Protoplanetarios Huecos}}} \normalsize
+
+\noindent En este proyecto se estudiará la migración de partículas sólidas inmersas en un disco protoplanetario que rodea a una estrella central. El disco presenta un \textbf{hueco interno}, es decir, no hay gas dentro de un radio \(r_\text{min}\) alrededor de la estrella. El gas ejerce dos efectos principales sobre las partículas:
+
+\begin{enumerate}
+\item Su \textbf{gravedad}, que contribuye al potencial total del sistema.
+\item Su \textbf{arrastre}, que tiende a acelerar o frenar a las partículas hasta que se adapten a la velocidad local del gas.
+\end{enumerate}
+
+El objetivo es simular de forma numérica cómo estas partículas evolucionan radialmente en el disco debido a estas interacciones.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Etapas del proyecto:}
+
+\begin{enumerate}
+
+\item \textbf{Cálculo del potencial gravitatorio del disco y estrella}
+
+\begin{itemize}
+\item Considerar una densidad de masa radial del disco, expresada en función del radio \(r = \sqrt{x^2 + y^2}\):
+\[
+\rho_\text{disk}(r) =
+\begin{cases}
+0 & r < r_\text{min},\\[1mm]
+\rho_0 \left(\frac{r_0}{r}\right)^p & r \ge r_\text{min},
+\end{cases}
+\]
+donde \(r_\text{min}\) define el hueco interno y \(p\) es un índice de densidad radial.
+\item La estrella central se modela como un núcleo compacto uniforme de radio \(R_\star\):
+\[
+\rho_\star(x,y) =
+\begin{cases}
+\dfrac{M_\star}{\pi R_\star^2}, & \sqrt{x^2+y^2} \le R_\star \\[1ex]
+0, & \sqrt{x^2+y^2} > R_\star
+\end{cases}
+\]
+\item Resolver la ecuación de Poisson en 2D cartesianas considerando ambas contribuciones:
+\[
+\nabla^2 \Phi(x,y) = 4 \pi G \left[ \rho_\star(x,y) + \rho_\text{disk}(x,y) \right]
+\]
+usando diferencias finitas.
+\item Se obtiene el potencial \(\Phi(x,y)\) en toda la malla.
+\end{itemize}
+
+\item \textbf{Cálculo del campo gravitatorio}
+
+\begin{itemize}
+\item El campo se obtiene mediante:
+\[
+\mathbf{g}(x,y) = - \nabla \Phi(x,y) = -\left(\frac{\partial \Phi}{\partial x}, \frac{\partial \Phi}{\partial y}\right)
+\]
+\item Discretizar el gradiente usando diferencias finitas centradas.
+\item Este campo incluye tanto la gravedad de la estrella central como la del disco.
+\end{itemize}
+
+\item \textbf{Integración de las trayectorias de las partículas}
+
+\begin{itemize}
+\item Cada partícula sigue la segunda ley de Newton con arrastre:
+\[
+\frac{d \mathbf{v}}{dt} = \mathbf{g}(x,y) - \gamma (\mathbf{v} - \mathbf{v}_\text{gas}(r)), \quad
+\frac{d \mathbf{r}}{dt} = \mathbf{v}.
+\]
+\item El coeficiente de arrastre \(\gamma\) puede ser constante.
+\item La velocidad del gas se define como un campo azimutal en función de \(r\):
+\[
+\mathbf{v}_\text{gas}(r) = v_0 \left(\frac{r_0}{r}\right)^{\alpha} \hat{\boldsymbol{\phi}}, \quad
+\hat{\boldsymbol{\phi}} = \left(-\frac{y}{r}, \frac{x}{r}\right)
+\]
+\item Integrar usando métodos numéricos como \code{Runge-Kutta 4} o \code{Verlet}.
+\item Registrar la evolución radial y las trayectorias de las partículas.
+\end{itemize}
+
+\item \textbf{Visualización}
+
+\begin{itemize}
+\item Mapas del potencial \(\Phi(x,y)\) y del campo \(\mathbf{g}(x,y)\).
+\item Trayectorias de partículas mostrando la migración radial en el disco.
+\item Comparación de diferentes perfiles de densidad del disco, radios del hueco interno y valores de arrastre.
+\end{itemize}
+
+\end{enumerate}
+
+\noindent \textbf{Nota:} Este modelo simplificado no considera la presión del gas ni efectos hidrodinámicos complejos; el objetivo es centrarse en la interacción gravitatoria y el arrastre básico para estudiar la migración de partículas.
+
+\end{document}

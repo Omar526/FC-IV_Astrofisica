@@ -1,0 +1,162 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}                                 						     % language
+	\spanishdecimal{.}
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amssymb}                     						     % amspackages
+\usepackage{color}                                          						     % color
+\usepackage[left=1.4cm,right=1.4cm,top=1.4cm,bottom=1.8cm, paperwidth=216mm, paperheight=330mm]{geometry}
+\usepackage{enumitem}
+\usepackage{multicol}
+\title{\textbf{PEP 1}}
+\author{Omar Fernández -- omar.fernandez.o@usach.cl}
+
+\usepackage{fancyhdr}
+\lhead[]{}
+\chead[]{}
+\rhead[]{}
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot[]{}
+\cfoot[]{\thepage}
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrulewidth}{0pt}
+}
+
+% -- New commands and Renew commands
+%\renewcommand{\labelitemi}{$\blacktriangleright$}
+%\renewcommand{\labelitemii}{$\blacktriangleright$}
+%\renewcommand{\thesubfigure}{\arabic{figure}.\alph{subfigure}}
+%\renewcommand{\bibfont}{\fontsize{8}{8.5}\selectfont}
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand{\figref}[1]{\textbf{\textsf{Fig. \ref{#1}}}}
+\newcommand{\tabref}[1]{\textbf{\textsf{Tabla \ref{#1}}}}
+\newcommand{\subfigref}[1]{\textbf{\textsf{Fig. \subref{#1}}}}
+
+
+\newcommand{\pt}[1]{\textbf{\textsf{#1}}}
+
+
+% -- New enviroments and Renew enviroments
+\newenvironment{logotype}[1]{\vspace{-1cm}#1}{}
+\newenvironment{titulo}{ \centering \Large \bfseries \sffamily}{ \\  \vspace{3pt}}
+\newenvironment{authorinfo}[7]{\centering \textsf{\textbf{#5}} \par Profesor: \textsl{#1} -- \textcolor{blue}{#2}\par Ayudante: \textsl{#3} -- \textcolor{blue}{#4}\par \textit{#6}\par #7\par}{}
+\newenvironment{resumen}{\footnotesize \begin{center} \textbf{Resumen} \end{center} \vspace{-7pt}}{\vspace{3pt}}
+\newenvironment{keywords}{\footnotesize \textbf{Palabras Claves:}\vspace{-7pt}}{\vspace{3pt}}
+
+% -- Counter defintion
+\newcounter{problem}
+
+
+\newenvironment{problem}[1]
+  {\noindent\stepcounter{problem}\large\textbf{\textsf{\textcolor{black}{Problema \theproblem. #1}}} \normalsize }
+  {}
+
+% -- Setlength fixing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+%\twocolumn[
+\begin{logotype}
+  {\includegraphics[scale=0.08]{USACHcolor.pdf}}
+\end{logotype}
+
+\vspace*{-1cm}
+
+\begin{titulo}
+Proyectos -- Física Computacional IV
+\end{titulo}
+
+\vspace*{0.2cm}
+
+\begin{authorinfo}
+  {Omar Fernández Olguín}
+  {omar.fernandez.o@usach.cl}
+  {Nicolás Campos Agusto}
+  {nicolas.campos.a@usach.cl}
+  {Astrofísica con mención en ciencia de datos}
+  {Departamento de Física, Facultad de Ciencias, Universidad de Santiago de Chile}
+  {\today}
+\end{authorinfo} 
+
+
+\vspace*{0.2cm}
+
+\vspace{1ex}\hrule\vspace{1ex}
+
+
+
+\noindent \large{\textbf{\textsf{Resolución de la Ecuación de Ondas en 2D mediante Diferencias Finitas}}} \normalsize
+
+El objetivo de este trabajo es modelar la propagación de ondas en un medio bidimensional utilizando el método de diferencias finitas para resolver la ecuación de ondas dependiente del tiempo. Se estudiará la propagación de ondas radiales generadas por una y/o múltiples fuentes, así como los fenómenos de interferencia que emergen de la superposición de frentes de onda. Se analizarán distintas condiciones iniciales y de frontera, junto con la estabilidad numérica del esquema mediante el criterio de Von Neumann. Los resultados se presentarán mediante visualizaciones 2D y 3D y, en lo posible, animaciones.
+
+\vspace{0.5cm}
+
+\noindent \large{\textbf{\textsf{Análisis Principales:}}} \normalsize
+
+\begin{enumerate}
+
+\item \textbf{Ecuación de ondas en dos dimensiones}
+
+La ecuación de ondas en un medio bidimensional se escribe como
+\[
+\frac{\partial^2 u}{\partial t^2}
+=
+c^2 \left(
+\frac{\partial^2 u}{\partial x^2}
++
+\frac{\partial^2 u}{\partial y^2}
+\right),
+\]
+donde \(u(x,y,t)\) representa el campo de desplazamiento (o amplitud de la onda) y \(c\) es la velocidad de propagación de la onda en el medio.
+
+Utilice diferencias finitas centrales para aproximar las derivadas espaciales y temporales, y proponga el esquema numérico explícito correspondiente.
+
+\vspace{0.2cm}
+
+\item \textbf{Ondas radiales}
+
+Considere condiciones iniciales con simetría radial, por ejemplo un pulso gaussiano centrado en el dominio:
+\[
+u(x,y,0) = A \exp\left( -\frac{(x-x_0)^2 + (y-y_0)^2}{2\sigma^2} \right),
+\quad
+\frac{\partial u}{\partial t}(x,y,0) = 0.
+\]
+Analice la propagación radial del frente de onda y su dependencia con la velocidad de propagación \(c\).
+
+\vspace{0.2cm}
+
+\item \textbf{Interferencia de ondas}
+
+Introduzca dos o más fuentes puntuales oscilantes ubicadas en distintas posiciones del plano y estudie los patrones de interferencia generados por la superposición de ondas. Analice la estructura espacial de máximos y mínimos de interferencia y su evolución temporal, extrayendo un perfil espacial.
+
+\vspace{0.2cm}
+
+\item \textbf{Análisis de estabilidad de Von Neumann}
+
+Realice un análisis de estabilidad tipo Von Neumann para el esquema numérico en dos dimensiones. Determine la condición que deben satisfacer los pasos espaciales \(\Delta x\), \(\Delta y\) y el paso temporal \(\Delta t\) para asegurar la estabilidad del método.
+
+
+\vspace{0.2cm}
+
+\item \textbf{Visualización avanzada}
+
+Cree una animación que muestre la propagación de las ondas en el plano y la formación de patrones de interferencia a lo largo del tiempo.
+
+\end{enumerate}
+
+\end{document}
